@@ -1,0 +1,4 @@
+enum FileItemShape {
+  list,
+  card,
+}
