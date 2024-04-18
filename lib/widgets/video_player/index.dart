@@ -4,7 +4,8 @@ import 'package:media_kit/media_kit.dart'; // Provides [Player], [Media], [Playl
 import 'package:media_kit_video/media_kit_video.dart';
 
 class VideoPlayer extends StatefulWidget {
-  const VideoPlayer({super.key});
+  final String url;
+  const VideoPlayer({super.key, required this.url});
   @override
   State<StatefulWidget> createState() => _VideoPlayer();
 }
@@ -18,8 +19,7 @@ class _VideoPlayer extends State<VideoPlayer> {
   void initState() {
     super.initState();
     // Play a [Media] or [Playlist].
-    player.open(Media(
-        'http://192.168.1.91:3000/favor/movie/normal/%E5%B0%84%E9%9B%95%E8%8B%B1%E9%9B%84%E4%BC%A0%E4%B9%8B%E4%B8%9C%E6%88%90%E8%A5%BF%E5%B0%B1.mkv'));
+    player.open(Media(widget.url));
   }
 
   @override

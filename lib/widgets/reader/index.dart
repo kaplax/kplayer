@@ -5,7 +5,6 @@ import 'package:kplayer/services/api_service.dart';
 import 'package:kplayer/utils/url.dart';
 import 'package:kplayer/widgets/common/center_tap_detector.dart';
 
-
 // TODO: jump to previous route with dirIndex param
 
 class Reader extends StatefulWidget {
@@ -146,12 +145,15 @@ class _ReaderState extends State<Reader> {
           ? const CircularProgressIndicator()
           : CenterTapDetector(
               onCenterTap: showBottomPopup,
-              child: ListView(
-                  children: _fileList!.list
-                      .map((fileInfo) => Image(
-                          image: NetworkImage(
-                              '$rootPath/${encodeUriParam(widget._parentPath)}/${_dirName}/${fileInfo.name}')))
-                      .toList()),
+              child: ListView.builder(
+                itemBuilder: (context, idx) {
+                  final fileInfo = _fileList!.list[idx];
+                  return Image(
+                      image: NetworkImage(
+                          '$rootPath/${encodeUriParam(widget._parentPath)}/${_dirName}/${fileInfo.name}'));
+                },
+                itemCount: _fileList!.list.length,
+              ),
             ),
     );
   }

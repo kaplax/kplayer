@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kplayer/const/config.dart';
 import 'package:kplayer/enum/commom.dart';
 import 'package:kplayer/models/file.dart';
 import 'package:kplayer/utils/icon.dart';
@@ -43,14 +44,18 @@ class FileItem extends StatelessWidget {
                   dirIndex: file.isDir ? curIndex : dirIndex)));
     } else {
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => isImageType(file.ext)
-                  ? Reader(
-                      path: path,
-                      dirIndex: dirIndex,
-                    )
-                  : VideoPlayer()));
+        context,
+        MaterialPageRoute(
+          builder: (context) => isImageType(file.ext)
+              ? Reader(
+                  path: path,
+                  dirIndex: dirIndex,
+                )
+              : VideoPlayer(
+                  url: '$rootPath$path/${file.name}',
+                ),
+        ),
+      );
     }
   }
 
@@ -62,35 +67,39 @@ class FileItem extends StatelessWidget {
           onLongPress: onLongPress,
           child: Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.all(Radius.circular(6)),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.08),
-                        spreadRadius: 1.2,
-                        blurRadius: 2,
-                        offset: const Offset(0, 1.5))
-                  ]),
+                // color: Colors.white,
+                borderRadius: const BorderRadius.all(Radius.circular(6)),
+                // boxShadow: [
+                //   BoxShadow(
+                //       color: Colors.black.withOpacity(0.08),
+                //       spreadRadius: 1.2,
+                //       blurRadius: 2,
+                //       offset: const Offset(0, 1.5))
+                // ],
+              ),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Expanded(
-                        flex: 2,
-                        child: file.isDir
-                            ? renderIcon('dir', size: 50)
-                            : isImageType(file.ext)
-                                ? Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(6)),
-                                        image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(
-                                                getFileNetworkPath(
-                                                    path, file.name)))),
-                                  )
-                                : renderIcon(file.ext, size: 50)),
+                      flex: 2,
+                      child: file.isDir
+                          ? renderIcon('dir', size: 60)
+                          : isImageType(file.ext)
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(6)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                        getFileNetworkPath(path, file.name),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : renderIcon(file.ext, size: 60),
+                    ),
                     Expanded(
                         flex: 1,
                         child: Row(

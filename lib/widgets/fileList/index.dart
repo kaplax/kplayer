@@ -29,11 +29,8 @@ class _FileList extends State<FileList> {
   Widget build(BuildContext context) {
     // final fileList = list
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
+      appBar: AppBar(),
       body: Container(
-        color: Colors.grey[100],
         child: FutureBuilder(
             future: futureFileList,
             builder: (context, snapshot) {

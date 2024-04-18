@@ -106,7 +106,7 @@ class VideoControlsThemeData {
       Spacer(flex: 2),
     ],
     this.topButtonBar = const [],
-    this.controlsHoverDuration = const Duration(seconds: 3),
+    this.controlsHoverDuration = const Duration(seconds: 5),
     this.horizontalGestureSensitivity = 1000,
     this.seekBarMargin = EdgeInsets.zero,
     this.seekBarHeight = 2.4,

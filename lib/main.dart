@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kplayer/theme/index.dart';
 import 'package:kplayer/widgets/fileList/index.dart';
 import 'package:media_kit/media_kit.dart';
 // import 'package:fm/widgets/fileList/item.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // Necessary initialization for package:media_kit.
   MediaKit.ensureInitialized();
   runApp(const MyApp());
 }
@@ -17,12 +17,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.yellow,
-          brightness: Brightness.light,
-        ),
-      ),
+      theme: AppTheme.theme,
+      darkTheme: ThemeData.dark(),
       home: const MyHomePage(title: 'Flutter Home Page'),
     );
   }
@@ -39,46 +35,46 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: FileList(path: '', dirIndex: -1)
-        // body: ListView(children: <Widget>[
-        //   for (var i = 0; i < 100; i++)
-        //     GestureDetector(
-        //       onTap: () {
-        //         Navigator.of(context).push(MaterialPageRoute(
-        //             builder: (context) => ItemDetail(title: 'Item $i')));
-        //       },
-        //       child: ListTile(
-        //         title: Text('Item $i'),
-        //       ),
-        //     )
-        // ]),
-        // body: CustomScrollView(
-        //   slivers: [
-        //     const SliverAppBar(
-        //       title: Text('SliverAppBar'),
-        //       floating: false,
-        //       expandedHeight: 200,
-        //       flexibleSpace: FlexibleSpaceBar(),
-        //     ),
-        //     SliverList(
-        //       delegate: SliverChildBuilderDelegate(
-        //         (context, index) {
-        //           return ListTile(
-        //             title: Text('Item $index'),
-        //             onTap: () {
-        //               Navigator.of(context).push(MaterialPageRoute(
-        //                   builder: (context) =>
-        //                       ItemDetail(title: 'Item $index')));
-        //             },
-        //           );
-        //         },
-        //         childCount: 1000,
-        //       ),
-        //     ),
-        //   ],
-        // ),
-
-        );
+    return const Scaffold(
+      body: FileList(path: '', dirIndex: -1),
+      // body: ListView(children: <Widget>[
+      //   for (var i = 0; i < 100; i++)
+      //     GestureDetector(
+      //       onTap: () {
+      //         Navigator.of(context).push(MaterialPageRoute(
+      //             builder: (context) => ItemDetail(title: 'Item $i')));
+      //       },
+      //       child: ListTile(
+      //         title: Text('Item $i'),
+      //       ),
+      //     )
+      // ]),
+      // body: CustomScrollView(
+      //   slivers: [
+      //     const SliverAppBar(
+      //       title: Text('SliverAppBar'),
+      //       floating: false,
+      //       expandedHeight: 200,
+      //       flexibleSpace: FlexibleSpaceBar(),
+      //     ),
+      //     SliverList(
+      //       delegate: SliverChildBuilderDelegate(
+      //         (context, index) {
+      //           return ListTile(
+      //             title: Text('Item $index'),
+      //             onTap: () {
+      //               Navigator.of(context).push(MaterialPageRoute(
+      //                   builder: (context) =>
+      //                       ItemDetail(title: 'Item $index')));
+      //             },
+      //           );
+      //         },
+      //         childCount: 1000,
+      //       ),
+      //     ),
+      //   ],
+      // ),
+    );
   }
 }
 

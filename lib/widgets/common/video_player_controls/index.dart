@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:kplayer/widgets/common/video_player_controls/method/fullscreen.dart';
 import 'package:kplayer/widgets/common/video_player_controls/theme.dart';
 import 'package:kplayer/widgets/common/video_player_controls/widget/fullscreen_inherited_widget.dart';
+import 'package:kplayer/widgets/common/video_player_controls/widget/rate_menu.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart' as mediaKit;
 import 'package:media_kit_video/media_kit_video_controls/media_kit_video_controls.dart';
 // import 'package:volume_controller/volume_controller.dart';
@@ -44,6 +46,7 @@ class _VideoControlsState extends State<_VideoControls> {
 
   bool _speedUpIndicator = false;
 
+  bool _visibleMoreSetting = false;
   bool _mountSeekBackwardButton = false;
   bool _mountSeekForwardButton = false;
   bool _hideSeekBackwardButton = false;
@@ -56,6 +59,9 @@ class _VideoControlsState extends State<_VideoControls> {
   Timer? _timer;
 
   double _volumeValue = 0.0;
+  double _curRate = 1.0;
+
+  late Player player = controller(context).player;
 
   double get subtitleVerticalShiftOffset =>
       (_theme(context).padding?.bottom ?? 0) +
@@ -73,8 +79,30 @@ class _VideoControlsState extends State<_VideoControls> {
     }
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    controller(context).player.stream.playing.listen((playing) {
+      if (playing && visible) {
+        hiddenControlPanel();
+      }
+    });
+  }
+
   final ValueNotifier<Duration> _seekBarDeltaValueNotifier =
       ValueNotifier<Duration>(Duration.zero);
+
+  void hiddenControlPanel() {
+    _timer?.cancel();
+    _timer = Timer(_theme(context).controlsHoverDuration, () {
+      if (mounted && player.state.playing) {
+        setState(() {
+          visible = false;
+        });
+        unshiftSubtitle();
+      }
+    });
+  }
 
   void shiftSubtitle() {
     if (_theme(context).shiftSubtitlesOnControlsVisibilityChange) {
@@ -110,7 +138,7 @@ class _VideoControlsState extends State<_VideoControls> {
     setState(() {
       _speedUpIndicator = false;
     });
-    controller(context).player.setRate(1.0);
+    controller(context).player.setRate(_curRate);
   }
 
   void onDoubleTapSeekForward() {
@@ -132,15 +160,7 @@ class _VideoControlsState extends State<_VideoControls> {
         visible = true;
       });
       shiftSubtitle();
-      _timer?.cancel();
-      _timer = Timer(_theme(context).controlsHoverDuration, () {
-        if (mounted) {
-          setState(() {
-            visible = false;
-          });
-          unshiftSubtitle();
-        }
-      });
+      hiddenControlPanel();
     } else {
       setState(() {
         visible = false;
@@ -189,6 +209,14 @@ class _VideoControlsState extends State<_VideoControls> {
       _dragInitialDetail = Offset.zero;
       showSwipeDuration = false;
     });
+  }
+
+  void onRateChange(double rate) {
+    setState(() {
+      _curRate = rate;
+    });
+    controller(context).player.setRate(rate);
+    Navigator.of(context).pop();
   }
 
   @override
@@ -291,9 +319,76 @@ class _VideoControlsState extends State<_VideoControls> {
                               margin: _theme(context).bottomButtonBarMargin,
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                children: _theme(context).topButtonBar,
+                                // TODO: 待替换
+                                // children: _theme(context).topButtonBar,
+                                children: [
+                                  Container(
+                                    child: const Text('Back'),
+                                  ),
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _visibleMoreSetting = true;
+                                            showModalBottomSheet(
+                                                context: context,
+                                                builder: (context) {
+                                                  return Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            16),
+                                                    child: Row(
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            showModalBottomSheet(
+                                                                context:
+                                                                    context,
+                                                                builder: (ctx) {
+                                                                  return RateMenu(
+                                                                    value:
+                                                                        _curRate,
+                                                                    onTap:
+                                                                        onRateChange,
+                                                                  );
+                                                                });
+                                                          },
+                                                          child: const Column(
+                                                            children: [
+                                                              Icon(
+                                                                Icons
+                                                                    .one_x_mobiledata,
+                                                              ),
+                                                              Text(
+                                                                '倍速播放',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                });
+                                          });
+                                        },
+                                        icon: const Icon(
+                                          Icons.more_vert,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                             Expanded(
@@ -323,16 +418,7 @@ class _VideoControlsState extends State<_VideoControls> {
                                       _timer?.cancel();
                                     },
                                     onSeekEnd: () {
-                                      _timer = Timer(
-                                          _theme(context).controlsHoverDuration,
-                                          () {
-                                        if (mounted) {
-                                          setState(() {
-                                            visible = false;
-                                          });
-                                          unshiftSubtitle();
-                                        }
-                                      });
+                                      hiddenControlPanel();
                                     },
                                   ),
                                 Container(
