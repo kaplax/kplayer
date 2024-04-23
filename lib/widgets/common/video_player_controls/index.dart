@@ -325,8 +325,14 @@ class _VideoControlsState extends State<_VideoControls> {
                                 // TODO: 待替换
                                 // children: _theme(context).topButtonBar,
                                 children: [
-                                  Container(
-                                    child: const Text('Back'),
+                                  IconButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    icon: const Icon(
+                                      Icons.arrow_back_ios,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                   Row(
                                     children: [

@@ -33,49 +33,10 @@ class _VideoPlayer extends State<VideoPlayer> {
     return Scaffold(
       body: Container(
         color: Colors.black,
-        child: Center(
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-            // Use [Video] widget to display video output.
-            child: Video(
-              controller: controller,
-              controls: VideoPlayerControls,
-              // controls: (state) {
-              //   return Column(
-              //     children: [
-              //       Center(
-              //           child: IconButton(
-              //               onPressed: () {
-              //                 state.widget.controller.player.playOrPause();
-              //               },
-              //               icon: StreamBuilder(
-              //                   stream:
-              //                       state.widget.controller.player.stream.playing,
-              //                   builder: (context, playing) {
-              //                     // state.widget.controller.player.state.position.inSeconds.toDouble()
-              //                     return Icon(playing.data == true
-              //                         ? Icons.pause
-              //                         : Icons.play_arrow);
-              //                   }))),
-              //       StreamBuilder(
-              //           stream: state.widget.controller.player.stream.position,
-              //           builder: (context, position) {
-              //             return Slider(
-              //                 value: position.data!.inSeconds.toDouble(),
-              //                 min: 0,
-              //                 max: state.widget.controller.player.state.duration
-              //                     .inSeconds
-              //                     .toDouble(),
-              //                 onChanged: (value) {
-              //                   controller.player
-              //                       .seek(Duration(seconds: value.toInt()));
-              //                 });
-              //           })
-              //     ],
-              //   );
-              // },
-            ),
+        child: SafeArea(
+          child: Video(
+            controller: controller,
+            controls: VideoPlayerControls,
           ),
         ),
       ),

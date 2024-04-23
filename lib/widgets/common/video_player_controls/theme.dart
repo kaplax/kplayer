@@ -81,7 +81,7 @@ class VideoControlsThemeData {
     this.visibleOnMount = false,
     this.backdropColor = const Color(0x66000000),
     this.shiftSubtitlesOnControlsVisibilityChange = false,
-    this.speedUpFactor = 2.0,
+    this.speedUpFactor = 3.0,
     this.padding,
     this.speedUpOnLongPress = true,
     this.seekOnDoubleTap = true,
